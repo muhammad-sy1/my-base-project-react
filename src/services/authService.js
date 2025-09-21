@@ -1,6 +1,7 @@
 // store.js
 import { create } from "zustand";
 import axios from "axios";
+import { endpoints } from "../https/endpoints";
 
 const useLoginStore = create((set) => ({
   data: null,
@@ -13,7 +14,7 @@ const useLoginStore = create((set) => ({
       // const baseurl = process.env.REACT_APP_BASE_URL;
 
       const response = await axios.post(
-        `https://izikiz-back.bayanmasters.com/api/v1/app/auth/login`,
+        `${endpoints.baseURL}${endpoints.logIn}`,
         body,
         {
           headers: {

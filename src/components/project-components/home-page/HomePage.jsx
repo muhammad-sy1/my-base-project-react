@@ -128,7 +128,7 @@ const HomePage = () => {
               </div>
 
               {/* Search button */}
-              <Button variant="heavy">{t("banner.search")}</Button>
+              <Button >{t("banner.search")}</Button>
             </div>
           </div>
         </div>

@@ -51,9 +51,7 @@ export function InputForm() {
   function onSubmit(data) {
     toast(t("contact.form.toastTitle"), {
       description: (
-        <pre className="mt-2 w-[320px] rounded-md bg-neutral-950 p-4">
-          <code className="text-white">{JSON.stringify(data, null, 2)}</code>
-        </pre>
+        <div className="text-white">{JSON.stringify(data, null, 2)}</div>
       ),
     });
   }
