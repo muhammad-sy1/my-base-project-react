@@ -25,14 +25,14 @@ import { IoIosSearch } from "react-icons/io";
 import { FaUserCircle } from "react-icons/fa";
 import { MdKeyboardArrowDown } from "react-icons/md";
 import { NavLink } from "react-router";
-// import useLoginStore from "@/services/authService";
-import { getCookie } from "@/utils/cookies";
+// import { getCookie } from "@/utils/cookies";
 
 export default function Header() {
   const { t } = useTranslation();
-
-  // const { error } = useLoginStore();
-  const username = getCookie("username"); //
+  const token = localStorage.getItem("token");
+  // const firstName = localStorage.getItem("firstName");
+  // const lastName = localStorage.getItem("lastName");
+  // const username = getCookie("username");
 
   return (
     <header>
@@ -96,11 +96,9 @@ export default function Header() {
                     </div>
                     <DialogFooter>
                       <DialogClose asChild>
-                        <Button variant="light">{t("header.cancel")}</Button>
+                        <Button variant="outline">{t("header.cancel")}</Button>
                       </DialogClose>
-                      <Button type="submit" variant="heavy">
-                        {t("header.search")}
-                      </Button>
+                      <Button type="submit">{t("header.search")}</Button>
                     </DialogFooter>
                   </DialogContent>
                 </form>
@@ -112,10 +110,9 @@ export default function Header() {
                   <span className="flex items-center gap-x-1 text-2xl transition-colors text-muted-foreground hover:text-foreground">
                     <FaUserCircle />
                     <MdKeyboardArrowDown />
-                    <div className="text-lg font-semibold">
-                      {/* !error && */}
-                      {username}
-                    </div>
+                    {/* <div className="text-lg font-semibold">
+                      {token && `${firstName} ${lastName}`}
+                    </div> */}
                   </span>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent>
@@ -124,14 +121,14 @@ export default function Header() {
                   <DropdownMenuItem>{t("header.profile")}</DropdownMenuItem>
                   <DropdownMenuItem>{t("header.billing")}</DropdownMenuItem>
                   <DropdownMenuItem>{t("header.team")}</DropdownMenuItem>
-                  {!username && (
+                  {!token && (
                     <DropdownMenuItem>
                       <NavLink className="flex w-full" to="/log-in">
                         Login
                       </NavLink>
                     </DropdownMenuItem>
                   )}
-                  {!username && (
+                  {!token && (
                     <DropdownMenuItem>
                       <NavLink className="flex w-full" to="/sign-up">
                         Sign Up

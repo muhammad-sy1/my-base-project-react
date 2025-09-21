@@ -113,7 +113,7 @@ export function InputForm() {
             </FormItem>
           )}
         />
-        <Button className="px-10" variant="light" type="submit">
+        <Button className="px-10" variant="outline" type="submit">
           {t("contact.form.submit")}
         </Button>
       </form>

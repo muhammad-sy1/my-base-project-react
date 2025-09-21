@@ -17,27 +17,27 @@ import {
 import { Input } from "@/components/ui/input";
 import { useTranslation } from "react-i18next";
 import { NavLink, useNavigate } from "react-router";
-import useLoginStore from "@/services/authService";
+import { t } from "i18next";
+import { useLoginStore } from "@/https/authApi";
+import { toast } from "sonner";
 
+const FormSchema = z.object({
+  email: z.string().email({
+    message: t("contact.form.emailError"),
+  }),
+  password: z
+    .string()
+    .min(8, {
+      message: t("contact.form.messageMinError"),
+    })
+    .regex(/[0-9]/, {
+      message: t("contact.form.passwordNumberError"),
+    }),
+});
 const Login = () => {
   const { t } = useTranslation();
-  // const base = process.env.REACT_APP_BASE_URL
-  // console.log(base)
   const [show, setShow] = useState(false);
   const navigate = useNavigate();
-  const FormSchema = z.object({
-    email: z.string().email({
-      message: t("contact.form.emailError"),
-    }),
-    password: z
-      .string()
-      .min(8, {
-        message: t("contact.form.messageMinError"),
-      })
-      .regex(/[0-9]/, {
-        message: t("contact.form.passwordNumberError"),
-      }),
-  });
 
   const form = useForm({
     resolver: zodResolver(FormSchema),
@@ -47,19 +47,26 @@ const Login = () => {
     },
   });
 
-  const { loginUser, loading, error } = useLoginStore();
+  const { loginUser, loading } = useLoginStore();
 
   const onSubmit = async (formData) => {
     const body = {
       ...formData,
       fcm_token: "random-token",
     };
-
-    await loginUser(body);
     console.log(body);
 
-    if (!error) {
+    try {
+      const res = await loginUser(body);
+      console.log(res.data);
+      toast.success("login successfully.");
+      localStorage.setItem("token", res.data.token);
+      localStorage.setItem("firstName", res.data.user.first_name);
+      localStorage.setItem("lastName", res.data.user.last_name);
       navigate("/");
+    } catch (err) {
+      console.log(err);
+      toast.error(err.data.message);
     }
   };
 
@@ -117,16 +124,22 @@ const Login = () => {
                   </FormItem>
                 )}
               />
-              <Button className="py-5 w-full" variant="heavy" type="submit">
+              <Button className="py-5 w-full" disabled={loading} type="submit">
                 Log in
                 {loading && <div className="loader"></div>}
               </Button>
-              {error && <p>{error}</p>}
+              {/* {error && <p>{error}</p>} */}
               <div className="flex justify-between items-center">
-                <NavLink className="" to="../signup">
+                <NavLink
+                  className="hover:underline underline-offset-1"
+                  to="/sign-up"
+                >
                   {t("contact.form.create")}
                 </NavLink>
-                <NavLink className="" to="../check">
+                <NavLink
+                  className="hover:underline underline-offset-1"
+                  to="/checkEmail"
+                >
                   {t("contact.form.forgetPassword")}
                 </NavLink>
               </div>
